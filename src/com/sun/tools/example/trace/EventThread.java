@@ -338,6 +338,12 @@ public class EventThread extends Thread {
 				+ event.method().returnTypeName() + "," + event.method().name()
 				+ "," + event.method().argumentTypeNames() + ",");
 
+		//if(event.method().argumentTypeNames().size() > 1){
+			//String chageName = ",";
+			//writeCSV("" +event.method().argumentTypeNames() + "");
+
+
+		//}
 	}
 
 	// Forward event for thread specific processing
