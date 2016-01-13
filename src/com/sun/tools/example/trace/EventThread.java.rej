@@ -1,0 +1,9 @@
+diff a/src/com/sun/tools/example/trace/EventThread.java b/src/com/sun/tools/example/trace/EventThread.java	(rejected hunks)
+@@ -344,6 +344,7 @@
+ 
+ 
+ 
++
+ 		//}
+ 	}
+ 

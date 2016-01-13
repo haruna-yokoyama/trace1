@@ -57,7 +57,8 @@ private PrintWriter writer;
     * main
     */
    public static void main(String[] args) {
-       Trace trace = new Trace(args);
+	   String[] tracePrograms= {"HelloWorld"};
+       Trace trace = new Trace(tracePrograms);
 
    }
 

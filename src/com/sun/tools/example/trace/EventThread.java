@@ -65,6 +65,12 @@ public class EventThread extends Thread {
 	// Maps ThreadReference to ThreadTrace instances
 	private Map<ThreadReference, ThreadTrace> traceMap = new HashMap<>();
 	private Map<String, Boolean> options;
+	private Object value;
+	private StringBuffer indent;
+	private ThreadReference thread;
+	private String baseIndent;
+	private String threadDelta;
+	private Object field;
 
 	/*
 	 * EventThread(VirtualMachine vm, String[] excludes, PrintWriter writer) {
@@ -235,8 +241,11 @@ public class EventThread extends Thread {
 
 			println("    " + field.name() + " = " + value);
 			field = setField(event.field());
-			value = setValue(event.valueCurrent());
+			value = setValue(event.valueToBe());
 		}
+
+
+
 
 		void exceptionEvent(ExceptionEvent event) {
 			println("Exception: " + event.exception() + " catch: "
@@ -489,11 +498,39 @@ public class EventThread extends Thread {
 		return declaringType;
 	}
 
-	private Value setValue(Value valueCurrent) {
+	private Object getValue(){
+		return value;
+	}
+	private Value setValue(Value value) {
 		return null;
 	}
 
+	private Object getField(){
+		return field;
+
+	}
 	private Field setField(Field field) {
 		return null;
 	}
+
+	/*public StringBuffer getIndent() {
+		return indent;
+	}
+
+	public void setIndent(StringBuffer indent) {
+		this.indent = indent;
+	}
+
+	public ThreadReference getThread() {
+		return thread;
+	}
+
+	public String getBaseIndent() {
+		return baseIndent;
+	}
+
+	public String getThreaddelta() {
+		return threadDelta;
+	}*/
+
 }
