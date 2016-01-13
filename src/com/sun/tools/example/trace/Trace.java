@@ -49,11 +49,16 @@ public final class Trace {
    // Class patterns for which we don't want events
    private String[] excludes = {"java.*", "javax.*", "sun.*", "com.sun.*"};
 
+private PrintWriter writer;
+
+
+
    /**
     * main
     */
    public static void main(String[] args) {
-      new Trace(args);
+       Trace trace = new Trace(args);
+
    }
 
    /**
@@ -135,6 +140,8 @@ public final class Trace {
       EventThread eventThread = new EventThread(vm, writer, excludes, options);
       eventThread.setEventRequests ();
       eventThread.start();
+      eventThread.getMethodName();
+      eventThread.getDeclaringType();
       redirectOutput(vm.process());
       vm.resume();
 

@@ -10,9 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.jdi.AbsentInformationException;
 import com.sun.jdi.ClassNotLoadedException;
 import com.sun.jdi.Field;
 import com.sun.jdi.IncompatibleThreadStateException;
+import com.sun.jdi.Location;
 import com.sun.jdi.ThreadReference;
 import com.sun.jdi.VMDisconnectedException;
 import com.sun.jdi.Value;
@@ -53,6 +55,9 @@ public class EventThread extends Thread {
 	private final PrintWriter writer; // Where output goes
 
 	static String nextBaseIndent = ""; // Starting indent for next thread
+
+	private String methodName;
+	private String declaringType;
 
 	private boolean connected = true; // Connected to VM
 	private boolean vmDied = true; // VMDeath occurred
@@ -199,8 +204,24 @@ public class EventThread extends Thread {
 		}
 
 		void methodEntryEvent(MethodEntryEvent event) {
-			println(event.method().name() + "  --  "
-					+ event.method().declaringType().name());
+
+			methodName = setMethodName(event.method().name());                         //methodNameと
+			declaringType = setDeclaringType(event.method().declaringType().name());   //declaringTypeを取得
+
+			try {
+				List<Location> LineLocation = event.method().allLineLocations();
+			} catch (AbsentInformationException e1) {
+				// TODO 自動生成された catch ブロック
+				e1.printStackTrace();
+			}
+
+			try {
+				println(event.method().name() + "  --  "
+						+ event.method().declaringType().name() + event.method().allLineLocations());
+			} catch (AbsentInformationException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
 			indent.append("| ");
 		}
 
@@ -211,7 +232,10 @@ public class EventThread extends Thread {
 		void fieldWatchEvent(ModificationWatchpointEvent event) {
 			Field field = event.field();
 			Value value = event.valueToBe();
+
 			println("    " + field.name() + " = " + value);
+			field = setField(event.field());
+			value = setValue(event.valueCurrent());
 		}
 
 		void exceptionEvent(ExceptionEvent event) {
@@ -332,20 +356,12 @@ public class EventThread extends Thread {
 		System.out.print(event.method().declaringType().name() + ","
 				+ event.method().returnTypeName() + "," + event.method().name()
 				+ event.method().argumentTypeNames() + ",");
+
 		// クラス名,返り値の型,メソッド名,引数の型
 		writeCSV("\n");
 		writeCSV(event.method().declaringType().name() + ","
 				+ event.method().returnTypeName() + "," + event.method().name()
 				+ "," + event.method().argumentTypeNames() + ",");
-
-		//if(event.method().argumentTypeNames().size() > 1){
-			//String chageName = ",";
-			//writeCSV("" +event.method().argumentTypeNames() + "");
-
-
-
-
-		//}
 	}
 
 	// Forward event for thread specific processing
@@ -362,7 +378,7 @@ public class EventThread extends Thread {
 	// Forward event for thread specific processing
 	private void fieldWatchEvent(ModificationWatchpointEvent event) {
 		threadTrace(event.thread()).fieldWatchEvent(event);
-		//Field field = event.field();
+		Field field = event.field();
 		Value value = event.valueToBe();
 
 		try {
@@ -453,6 +469,31 @@ public class EventThread extends Thread {
 				}
 			}
 		}
+	}
 
+	public String getMethodName() {
+		return methodName;
+	}
+
+	public String setMethodName(String methodName) {
+		this.methodName = methodName;
+		return methodName;
+	}
+
+	public String getDeclaringType() {
+		return declaringType;
+	}
+
+	public String setDeclaringType(String declaringType) {
+		this.declaringType = declaringType;
+		return declaringType;
+	}
+
+	private Value setValue(Value valueCurrent) {
+		return null;
+	}
+
+	private Field setField(Field field) {
+		return null;
 	}
 }
