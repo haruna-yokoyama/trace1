@@ -58,6 +58,14 @@ public class EventThread extends Thread {
 
 	private String methodName;
 	private String declaringType;
+	private String returnType;
+	private List<String> argumentType;
+	private Value valueToBe;
+	private Field field;
+	//private StringBuffer indent;
+	//private ThreadReference thread;
+	//private String baseIndent;
+	//private String threadDelta;
 
 	private boolean connected = true; // Connected to VM
 	private boolean vmDied = true; // VMDeath occurred
@@ -65,12 +73,8 @@ public class EventThread extends Thread {
 	// Maps ThreadReference to ThreadTrace instances
 	private Map<ThreadReference, ThreadTrace> traceMap = new HashMap<>();
 	private Map<String, Boolean> options;
-	private Object value;
-	private StringBuffer indent;
-	private ThreadReference thread;
-	private String baseIndent;
-	private String threadDelta;
-	private Object field;
+
+
 
 	/*
 	 * EventThread(VirtualMachine vm, String[] excludes, PrintWriter writer) {
@@ -211,8 +215,10 @@ public class EventThread extends Thread {
 
 		void methodEntryEvent(MethodEntryEvent event) {
 
-			methodName = setMethodName(event.method().name());                         //methodNameと
-			declaringType = setDeclaringType(event.method().declaringType().name());   //declaringTypeを取得
+			declaringType = setDeclaringType(event.method().declaringType().name());   //declaringTypeと
+			methodName = setMethodName(event.method().name());                         //methodNameを取得
+			returnType = setReturnType(event.method().returnTypeName());
+			argumentType = setArgumentType(event.method().argumentTypeNames());
 
 			try {
 				List<Location> LineLocation = event.method().allLineLocations();
@@ -224,6 +230,7 @@ public class EventThread extends Thread {
 			try {
 				println(event.method().name() + "  --  "
 						+ event.method().declaringType().name() + event.method().allLineLocations());
+				println(event.method().returnTypeName() + "   " + event.method().argumentTypeNames());
 			} catch (AbsentInformationException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
@@ -244,8 +251,25 @@ public class EventThread extends Thread {
 			value = setValue(event.valueToBe());
 		}
 
+		public StringBuffer getIndent() {
+			return indent;
+		}
 
+		public void setIndent(StringBuffer indent) {
+			this.indent = indent;
+		}
 
+		public ThreadReference getThread() {
+			return thread;
+		}
+
+		public String getBaseIndent() {
+			return baseIndent;
+		}
+
+		public String getThreaddelta() {
+			return threadDelta;
+		}
 
 		void exceptionEvent(ExceptionEvent event) {
 			println("Exception: " + event.exception() + " catch: "
@@ -480,6 +504,8 @@ public class EventThread extends Thread {
 		}
 	}
 
+	//getterとsetter
+
 	public String getMethodName() {
 		return methodName;
 	}
@@ -498,18 +524,37 @@ public class EventThread extends Thread {
 		return declaringType;
 	}
 
-	private Object getValue(){
-		return value;
-	}
-	private Value setValue(Value value) {
-		return null;
+	public String getReturnType() {
+		return returnType;
 	}
 
-	private Object getField(){
+	public String setReturnType(String returnType) {
+		return this.returnType = returnType;
+	}
+
+	public List<String> getArgumentType() {
+		return argumentType;
+	}
+
+	public List<String> setArgumentType(List<String> argumentType) {
+		return this.argumentType = argumentType;
+	}
+
+	public Value getValue(){
+		return valueToBe;
+	}
+
+	private Value setValue(Value valueToBe) {
+		// TODO 自動生成されたメソッド・スタブ
+		return valueToBe;
+	}
+
+	public Field getField(){
 		return field;
-
 	}
+
 	private Field setField(Field field) {
+		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 

@@ -143,6 +143,10 @@ private PrintWriter writer;
       eventThread.start();
       eventThread.getMethodName();
       eventThread.getDeclaringType();
+      eventThread.getReturnType();
+      eventThread.getArgumentType();
+      eventThread.getField();
+      eventThread.getValue();
       redirectOutput(vm.process());
       vm.resume();
 
