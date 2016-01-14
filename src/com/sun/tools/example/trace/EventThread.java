@@ -56,9 +56,9 @@ public class EventThread extends Thread {
 
 	static String nextBaseIndent = ""; // Starting indent for next thread
 
-	private String methodName;
-	private String declaringType;
-	private String returnType;
+	private List<String> methodName;
+	private List<String> declaringType;
+	private List<String> returnType;
 	private List<String> argumentType;
 	private Value valueToBe;
 	private Field field;
@@ -320,6 +320,8 @@ public class EventThread extends Thread {
 		return trace;
 	}
 
+
+
 	/**
 	 * Dispatch incoming events
 	 */
@@ -506,30 +508,32 @@ public class EventThread extends Thread {
 
 	//getterとsetter
 
-	public String getMethodName() {
+	public List<String> getMethodName() {
 		return methodName;
 	}
 
-	public String setMethodName(String methodName) {
-		this.methodName = methodName;
-		return methodName;
+	public List<String> setMethodName(String methodName) {
+		//this.methodName = methodName;
+		//return methodName;
+		return null;
 	}
 
-	public String getDeclaringType() {
+	public List<String> getDeclaringType() {
 		return declaringType;
 	}
 
-	public String setDeclaringType(String declaringType) {
-		this.declaringType = declaringType;
-		return declaringType;
+	public List<String> setDeclaringType(String name) {
+		return null;
+		//return this.name = name;
 	}
 
-	public String getReturnType() {
+	public List<String> getReturnType() {
 		return returnType;
 	}
 
-	public String setReturnType(String returnType) {
-		return this.returnType = returnType;
+	public List<String> setReturnType(String returnType) {
+		//return this.returnType = returnType;
+		return null;
 	}
 
 	public List<String> getArgumentType() {

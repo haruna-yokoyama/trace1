@@ -53,9 +53,9 @@ public final class Trace {
 	private String[] excludes = { "java.*", "javax.*", "sun.*", "com.sun.*" };
 
 	//追加したところ
-	private String methodName;
-	private String declaringType;
-	private String returnType;
+	private List<String> methodName;
+	private List<String> declaringType;
+	private List<String> returnType;
 	private List<String> argumentType;
 	private Field fieldName;
 	private Value valueName;
@@ -171,6 +171,8 @@ public final class Trace {
 		writer.close();
 	}
 
+
+
 	/**
 	 * Find a com.sun.jdi.CommandLineLaunch connector
 	 */
@@ -252,27 +254,27 @@ public final class Trace {
 		System.err.println("<args> are the arguments to <class>");
 	}
 
-	public String getMethodName() {
+	public List<String> getMethodName() {
 		return methodName;
 	}
 
-	public String setMethodName(String methodName) {
+	public List<String> setMethodName(List<String> methodName) {
 		return this.methodName = methodName;
 	}
 
-	public String getDeclaringType() {
+	public List<String> getDeclaringType() {
 		return declaringType;
 	}
 
-	public String setDeclaringType(String declaringType) {
+	public List<String> setDeclaringType(List<String> declaringType) {
 		return this.declaringType = declaringType;
 	}
 
-	public String getReturnType() {
+	public List<String> getReturnType() {
 		return returnType;
 	}
 
-	public String setReturnType(String returnType) {
+	public List<String> setReturnType(List<String> returnType) {
 		return this.returnType = returnType;
 	}
 
