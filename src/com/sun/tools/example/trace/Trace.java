@@ -156,6 +156,7 @@ public final class Trace {
 		argumentType = setArgumentType(eventThread.getArgumentType());
 		fieldName = setFieldName(eventThread.getField());
 		valueName = setValueName(eventThread.getValue());
+		//System.out.println(declaringType.get(0) + "  " + methodName.get(0) + "  " + returnType.get(0) + "  " + argumentType.get(0) + "  " + fieldName + "  " + valueName);
 
 		redirectOutput(vm.process());
 		vm.resume();

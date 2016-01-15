@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -215,10 +217,45 @@ public class EventThread extends Thread {
 
 		void methodEntryEvent(MethodEntryEvent event) {
 
-			declaringType = setDeclaringType(event.method().declaringType().name());   //declaringTypeと
-			methodName = setMethodName(event.method().name());                         //methodNameを取得
-			returnType = setReturnType(event.method().returnTypeName());
+
+			//methodName = new ArrayList<String>();
+			//returnType = new ArrayList<String>();
+			//argumentType = new ArrayList<String>();
+
+			//DeclaringTypeのStringをArrayListに変換
+			String str_declaring = event.method().declaringType().name();
+			String[] array1 = str_declaring.split(" ");
+			List<String> declaringType1 = new ArrayList<String>();
+			for(int i = 0; i < array1.length; i++){
+				declaringType1 = Arrays.asList(array1[i]);
+				declaringType = setDeclaringType(declaringType1);
+				System.out.println(declaringType.get(i));
+			}
+
+			//methodNameのStringをArrayListに変換
+			String str_method = event.method().name();
+			String[] array2 = str_method.split(" ");
+			List<String> methodName1 = new ArrayList<String>();
+			for(int i = 0; i< array2.length; i++){
+				methodName1 = Arrays.asList(array2[i]);
+				methodName = setMethodName(methodName1);
+				System.out.println(methodName.get(i));
+			}
+
+			//returnTypeのStringをArrayListに変換
+			String str_return = event.method().returnTypeName();
+			String[] array3 = str_return.split(" ");
+			List<String> returnType1 = new ArrayList<String>();
+			for(int i = 0; i< array3.length; i++){
+				returnType1 = Arrays.asList(array3[i]);
+				returnType = setMethodName(returnType1);
+				System.out.println(methodName.get(i));
+			}
+
 			argumentType = setArgumentType(event.method().argumentTypeNames());
+			System.out.println(argumentType);
+
+			//System.out.println(declaringType + "  " + methodName + "  " + returnType + "  " + argumentType);
 
 			try {
 				List<Location> LineLocation = event.method().allLineLocations();
@@ -319,8 +356,6 @@ public class EventThread extends Thread {
 		}
 		return trace;
 	}
-
-
 
 	/**
 	 * Dispatch incoming events
@@ -506,34 +541,40 @@ public class EventThread extends Thread {
 		}
 	}
 
+	/*public List<String> StringToList(String str){  //StringからListに変換するメソッド
+		List<String> list = new ArrayList<>();
+		StringTokenizer tokenizer = new StringTokenizer(str, "");
+		while(tokenizer.hasMoreElements()){
+			list.add(tokenizer.nextToken());
+		}
+		return list;
+
+	}*/
+
 	//getterとsetter
 
 	public List<String> getMethodName() {
 		return methodName;
 	}
 
-	public List<String> setMethodName(String methodName) {
-		//this.methodName = methodName;
-		//return methodName;
-		return null;
+	public List<String> setMethodName(List<String> methodName) {
+		return this.methodName = methodName;
 	}
 
 	public List<String> getDeclaringType() {
 		return declaringType;
 	}
 
-	public List<String> setDeclaringType(String name) {
-		return null;
-		//return this.name = name;
+	public List<String> setDeclaringType(List<String> declaringType) {
+		return this.declaringType = declaringType;
 	}
 
 	public List<String> getReturnType() {
 		return returnType;
 	}
 
-	public List<String> setReturnType(String returnType) {
-		//return this.returnType = returnType;
-		return null;
+	public void setReturnType(List<String> returnType) {
+		this.returnType = returnType;
 	}
 
 	public List<String> getArgumentType() {
@@ -559,27 +600,6 @@ public class EventThread extends Thread {
 
 	private Field setField(Field field) {
 		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		return field;
 	}
-
-	/*public StringBuffer getIndent() {
-		return indent;
-	}
-
-	public void setIndent(StringBuffer indent) {
-		this.indent = indent;
-	}
-
-	public ThreadReference getThread() {
-		return thread;
-	}
-
-	public String getBaseIndent() {
-		return baseIndent;
-	}
-
-	public String getThreaddelta() {
-		return threadDelta;
-	}*/
-
 }
