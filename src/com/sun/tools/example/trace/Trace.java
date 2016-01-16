@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.sun.jdi.Bootstrap;
 import com.sun.jdi.Field;
+import com.sun.jdi.Location;
 import com.sun.jdi.PathSearchingVirtualMachine;
 import com.sun.jdi.Value;
 import com.sun.jdi.VirtualMachine;
@@ -52,13 +53,16 @@ public final class Trace {
 	// Class patterns for which we don't want events
 	private String[] excludes = { "java.*", "javax.*", "sun.*", "com.sun.*" };
 
-	//追加したところ
+	// 追加したところ
 	private List<String> methodName;
 	private List<String> declaringType;
 	private List<String> returnType;
 	private List<String> argumentType;
+	private List<Location> lineLocation;
 	private Field fieldName;
 	private Value valueName;
+
+	private List<String> methodname1;
 
 	/**
 	 * main
@@ -150,13 +154,18 @@ public final class Trace {
 		eventThread.setEventRequests();
 		eventThread.start();
 
+		methodname1 = eventThread.getMethodName();
 		methodName = setMethodName(eventThread.getMethodName());
 		declaringType = setDeclaringType(eventThread.getDeclaringType());
 		returnType = setReturnType(eventThread.getReturnType());
 		argumentType = setArgumentType(eventThread.getArgumentType());
+		lineLocation = eventThread.getLineLocation();
 		fieldName = setFieldName(eventThread.getField());
 		valueName = setValueName(eventThread.getValue());
-		//System.out.println(declaringType.get(0) + "  " + methodName.get(0) + "  " + returnType.get(0) + "  " + argumentType.get(0) + "  " + fieldName + "  " + valueName);
+		System.out.println(declaringType + "  " + methodname1 + "  "
+				+ returnType + "  " + argumentType + "  " + fieldName + "  "
+				+ valueName);
+		System.out.println(methodname1 + " " + lineLocation);
 
 		redirectOutput(vm.process());
 		vm.resume();
@@ -171,8 +180,6 @@ public final class Trace {
 		}
 		writer.close();
 	}
-
-
 
 	/**
 	 * Find a com.sun.jdi.CommandLineLaunch connector
@@ -255,6 +262,7 @@ public final class Trace {
 		System.err.println("<args> are the arguments to <class>");
 	}
 
+	// getterとsetter
 	public List<String> getMethodName() {
 		return methodName;
 	}
@@ -301,5 +309,13 @@ public final class Trace {
 
 	public Value setValueName(Value valueName) {
 		return this.valueName = valueName;
+	}
+
+	public List<Location> getLineLication() {
+		return lineLocation;
+	}
+
+	public void setLineLication(List<Location> lineLication) {
+		this.lineLocation = lineLication;
 	}
 }

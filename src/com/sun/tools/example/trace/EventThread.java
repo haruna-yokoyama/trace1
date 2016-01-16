@@ -62,12 +62,13 @@ public class EventThread extends Thread {
 	private List<String> declaringType;
 	private List<String> returnType;
 	private List<String> argumentType;
+	private List<Location> lineLocation;
 	private Value valueToBe;
 	private Field field;
-	//private StringBuffer indent;
-	//private ThreadReference thread;
-	//private String baseIndent;
-	//private String threadDelta;
+	// private StringBuffer indent;
+	// private ThreadReference thread;
+	// private String baseIndent;
+	// private String threadDelta;
 
 	private boolean connected = true; // Connected to VM
 	private boolean vmDied = true; // VMDeath occurred
@@ -75,8 +76,6 @@ public class EventThread extends Thread {
 	// Maps ThreadReference to ThreadTrace instances
 	private Map<ThreadReference, ThreadTrace> traceMap = new HashMap<>();
 	private Map<String, Boolean> options;
-
-
 
 	/*
 	 * EventThread(VirtualMachine vm, String[] excludes, PrintWriter writer) {
@@ -216,49 +215,43 @@ public class EventThread extends Thread {
 		}
 
 		void methodEntryEvent(MethodEntryEvent event) {
-
-
-			//methodName = new ArrayList<String>();
-			//returnType = new ArrayList<String>();
-			//argumentType = new ArrayList<String>();
-
-			//DeclaringTypeのStringをArrayListに変換
+			// DeclaringTypeのStringをArrayListに変換
 			String str_declaring = event.method().declaringType().name();
 			String[] array1 = str_declaring.split(" ");
 			List<String> declaringType1 = new ArrayList<String>();
-			for(int i = 0; i < array1.length; i++){
-				declaringType1 = Arrays.asList(array1[i]);
-				declaringType = setDeclaringType(declaringType1);
-				System.out.println(declaringType.get(i));
-			}
+			// for(int i = 0; i < array1.length; i++){
+			declaringType1 = Arrays.asList(array1);
+			declaringType = setDeclaringType(declaringType1);
+			System.out.println(declaringType);
+			// }
 
-			//methodNameのStringをArrayListに変換
+			// methodNameのStringをArrayListに変換
 			String str_method = event.method().name();
 			String[] array2 = str_method.split(" ");
 			List<String> methodName1 = new ArrayList<String>();
-			for(int i = 0; i< array2.length; i++){
-				methodName1 = Arrays.asList(array2[i]);
-				methodName = setMethodName(methodName1);
-				System.out.println(methodName.get(i));
-			}
+			// for(int i = 0; i< array2.length; i++){
+			methodName1 = Arrays.asList(array2);
+			methodName = setMethodName(methodName1);
+			System.out.println(methodName);
+			// }
 
-			//returnTypeのStringをArrayListに変換
-			String str_return = event.method().returnTypeName();
-			String[] array3 = str_return.split(" ");
-			List<String> returnType1 = new ArrayList<String>();
-			for(int i = 0; i< array3.length; i++){
-				returnType1 = Arrays.asList(array3[i]);
-				returnType = setMethodName(returnType1);
-				System.out.println(methodName.get(i));
-			}
+			// returnTypeのStringをArrayListに変換
+			String str_return = event.method().returnTypeName();  //returnTypeをListに格納するための仮のString型の変数
+			String[] array3 = str_return.split(" ");               //仮の配列
+			List<String> returnType1 = new ArrayList<String>();   //仮のList<String>
+			// for(int i = 0; i< array3.length; i++){
+			returnType1 = Arrays.asList(array3);     //配列をListに変える
+			returnType = setMethodName(returnType1);  //変えたものをList<Sring>に代入
+			System.out.println(methodName);
+			// }
 
 			argumentType = setArgumentType(event.method().argumentTypeNames());
 			System.out.println(argumentType);
 
-			//System.out.println(declaringType + "  " + methodName + "  " + returnType + "  " + argumentType);
-
 			try {
-				List<Location> LineLocation = event.method().allLineLocations();
+				lineLocation = setLineLocation(event.method().allLineLocations());
+				System.out.println(lineLocation);
+
 			} catch (AbsentInformationException e1) {
 				// TODO 自動生成された catch ブロック
 				e1.printStackTrace();
@@ -266,8 +259,10 @@ public class EventThread extends Thread {
 
 			try {
 				println(event.method().name() + "  --  "
-						+ event.method().declaringType().name() + event.method().allLineLocations());
-				println(event.method().returnTypeName() + "   " + event.method().argumentTypeNames());
+						+ event.method().declaringType().name()
+						+ event.method().allLineLocations());
+				println(event.method().returnTypeName() + "   "
+						+ event.method().argumentTypeNames());
 			} catch (AbsentInformationException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
@@ -437,7 +432,7 @@ public class EventThread extends Thread {
 	// Forward event for thread specific processing
 	private void methodExitEvent(MethodExitEvent event) {
 		threadTrace(event.thread()).methodExitEvent(event);
-		//writeCSV("\n");
+		// writeCSV("\n");
 	}
 
 	// Forward event for thread specific processing
@@ -453,8 +448,9 @@ public class EventThread extends Thread {
 
 		try {
 			System.out.print(event.field().name() + "(" + event.field().type()
-					+  ")= " + value + ", "); // 変数(変数の型)
-			writeCSV(event.field().name() + "(" + event.field().type() + ")= " + value + ", ");
+					+ ")= " + value + ", "); // 変数(変数の型)
+			writeCSV(event.field().name() + "(" + event.field().type() + ")= "
+					+ value + ", ");
 		} catch (ClassNotLoadedException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
@@ -541,17 +537,16 @@ public class EventThread extends Thread {
 		}
 	}
 
-	/*public List<String> StringToList(String str){  //StringからListに変換するメソッド
-		List<String> list = new ArrayList<>();
-		StringTokenizer tokenizer = new StringTokenizer(str, "");
-		while(tokenizer.hasMoreElements()){
-			list.add(tokenizer.nextToken());
-		}
-		return list;
+	/*
+	 * public List<String> StringToList(String str){ //StringからListに変換するメソッド
+	 * List<String> list = new ArrayList<>(); StringTokenizer tokenizer = new
+	 * StringTokenizer(str, ""); while(tokenizer.hasMoreElements()){
+	 * list.add(tokenizer.nextToken()); } return list;
+	 *
+	 * }
+	 */
 
-	}*/
-
-	//getterとsetter
+	// getterとsetter
 
 	public List<String> getMethodName() {
 		return methodName;
@@ -585,21 +580,29 @@ public class EventThread extends Thread {
 		return this.argumentType = argumentType;
 	}
 
-	public Value getValue(){
+	public Value getValue() {
 		return valueToBe;
 	}
 
-	private Value setValue(Value valueToBe) {
+	public Value setValue(Value valueToBe) {
 		// TODO 自動生成されたメソッド・スタブ
 		return valueToBe;
 	}
 
-	public Field getField(){
+	public Field getField() {
 		return field;
 	}
 
-	private Field setField(Field field) {
+	public Field setField(Field field) {
 		// TODO 自動生成されたメソッド・スタブ
 		return field;
+	}
+
+	public List<Location> getLineLocation() {
+		return lineLocation;
+	}
+
+	public List<Location> setLineLocation(List<Location> lineLocation) {
+		return this.lineLocation = lineLocation;
 	}
 }
