@@ -161,23 +161,24 @@ public final class Trace {
 			eventThread.join();
 			errThread.join(); // Make sure output is forwarded
 			outThread.join(); // before we exit
+
 		} catch (InterruptedException exc) {
 			// we don't interrupt
 		}
-		
-		methodName = eventThread.setMethodName(methodName);
-		methodName = eventThread.getMethodName();
-		//methodName = setMethodName(eventThread.setMethodName(methodName));
 		declaringType = setDeclaringType(eventThread.getDeclaringType());
 		returnType = setReturnType(eventThread.getReturnType());
+		methodName = setMethodName(eventThread.getMethodName());
 		argumentType = setArgumentType(eventThread.getArgumentType());
 		lineLocation = eventThread.getLineLocation();
 		fieldName = setFieldName(eventThread.getField());
 		valueName = setValueName(eventThread.getValue());
-		System.out.println("setterとgetter:"+declaringType + "  " + methodName + "  "
-				+ returnType + "  " + argumentType + "  " + fieldName + "  "
-				+ valueName);
-		System.out.println(methodname1 + " " + lineLocation);
+		System.out.println("Trace.java : ");
+		System.out.println("declaringType : "+declaringType);
+		System.out.println("methodName : " +methodName);
+		System.out.println("returnType : " +returnType);
+		System.out.println("argumentType : "+argumentType);
+		System.out.println("field,value : "+fieldName + "  " + valueName);
+		System.out.println("lineLocation" + lineLocation);
 
 		writer.close();
 	}
@@ -272,7 +273,8 @@ public final class Trace {
 		return this.methodName = methodName;
 	}
 
-	public List<String> getDeclaringType(List<String> declaringType) {
+	public List<String> getDeclaringType() {
+		declaringType.addAll(declaringType);
 		return declaringType;
 	}
 

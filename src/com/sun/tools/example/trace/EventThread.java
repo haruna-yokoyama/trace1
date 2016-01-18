@@ -59,7 +59,9 @@ public class EventThread extends Thread {
 	static String nextBaseIndent = ""; // Starting indent for next thread
 
 	private List<String> methodName;
+	private String str_method;
 	private List<String> declaringType;
+	private String str_declaring;
 	private List<String> returnType;
 	private List<String> argumentType;
 	private List<Location> lineLocation;
@@ -219,38 +221,34 @@ public class EventThread extends Thread {
 			String str_declaring = event.method().declaringType().name();
 			String[] array1 = str_declaring.split(" ");
 			List<String> declaringType1 = new ArrayList<String>();
-			// for(int i = 0; i < array1.length; i++){
-			declaringType1 = Arrays.asList(array1);
+			declaringType1.addAll(Arrays.asList(array1));
 			declaringType = setDeclaringType(declaringType1);
-			System.out.println("getter: " + getDeclaringType());
 			System.out.println(declaringType);
-			// }
 
 			// methodNameのStringをArrayListに変換
-			String str_method = event.method().name();
+			str_method = event.method().name();
 			String[] array2 = str_method.split(" ");
 			List<String> methodName1 = new ArrayList<String>();
-			// for(int i = 0; i< array2.length; i++){
-			methodName1 = Arrays.asList(array2);
+			methodName1.addAll(Arrays.asList(array2));
 			methodName = setMethodName(methodName1);
 			System.out.println(methodName);
-			// }
 
 			// returnTypeのStringをArrayListに変換
-			String str_return = event.method().returnTypeName();  //returnTypeをListに格納するための仮のString型の変数
-			String[] array3 = str_return.split(" ");               //仮の配列
-			List<String> returnType1 = new ArrayList<String>();   //仮のList<String>
-			// for(int i = 0; i< array3.length; i++){
-			returnType1 = Arrays.asList(array3);     //配列をListに変える
-			returnType = setMethodName(returnType1);  //変えたものをList<Sring>に代入
+			String str_return = event.method().returnTypeName(); // returnTypeをListに格納するための仮のString型の変数
+			String[] array3 = str_return.split(" "); // 仮の配列
+			List<String> returnType1 = new ArrayList<String>(); // 仮のList<String>
+			returnType1.addAll(Arrays.asList(array3)); // 配列をListに変える
+			returnType = setMethodName(returnType1); // 変えたものをList<Sring>に代入
 			System.out.println(methodName);
-			// }
 
 			argumentType = setArgumentType(event.method().argumentTypeNames());
+			//argumentType.addAll(argumentType);
+
 			System.out.println(argumentType);
 
 			try {
-				lineLocation = setLineLocation(event.method().allLineLocations());
+				lineLocation = setLineLocation(event.method()
+						.allLineLocations());
 				System.out.println(lineLocation);
 
 			} catch (AbsentInformationException e1) {
@@ -550,14 +548,17 @@ public class EventThread extends Thread {
 	// getterとsetter
 
 	public List<String> getMethodName() {
+		methodName.addAll(methodName);
 		return methodName;
 	}
 
 	public List<String> setMethodName(List<String> methodName) {
+
 		return this.methodName = methodName;
 	}
 
 	public List<String> getDeclaringType() {
+		declaringType.addAll(declaringType);
 		return declaringType;
 	}
 
@@ -566,6 +567,7 @@ public class EventThread extends Thread {
 	}
 
 	public List<String> getReturnType() {
+		returnType.addAll(returnType);
 		return returnType;
 	}
 
@@ -574,6 +576,7 @@ public class EventThread extends Thread {
 	}
 
 	public List<String> getArgumentType() {
+		argumentType.addAll(argumentType);
 		return argumentType;
 	}
 
@@ -582,11 +585,11 @@ public class EventThread extends Thread {
 	}
 
 	public Value getValue() {
+
 		return valueToBe;
 	}
 
 	public Value setValue(Value valueToBe) {
-		// TODO 自動生成されたメソッド・スタブ
 		return valueToBe;
 	}
 
@@ -595,7 +598,6 @@ public class EventThread extends Thread {
 	}
 
 	public Field setField(Field field) {
-		// TODO 自動生成されたメソッド・スタブ
 		return field;
 	}
 
