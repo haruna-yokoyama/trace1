@@ -222,6 +222,7 @@ public class EventThread extends Thread {
 			// for(int i = 0; i < array1.length; i++){
 			declaringType1 = Arrays.asList(array1);
 			declaringType = setDeclaringType(declaringType1);
+			System.out.println("getter: " + getDeclaringType());
 			System.out.println(declaringType);
 			// }
 

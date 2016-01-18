@@ -153,20 +153,6 @@ public final class Trace {
 		EventThread eventThread = new EventThread(vm, writer, excludes, options);
 		eventThread.setEventRequests();
 		eventThread.start();
-
-		methodname1 = eventThread.getMethodName();
-		methodName = setMethodName(eventThread.getMethodName());
-		declaringType = setDeclaringType(eventThread.getDeclaringType());
-		returnType = setReturnType(eventThread.getReturnType());
-		argumentType = setArgumentType(eventThread.getArgumentType());
-		lineLocation = eventThread.getLineLocation();
-		fieldName = setFieldName(eventThread.getField());
-		valueName = setValueName(eventThread.getValue());
-		System.out.println(declaringType + "  " + methodname1 + "  "
-				+ returnType + "  " + argumentType + "  " + fieldName + "  "
-				+ valueName);
-		System.out.println(methodname1 + " " + lineLocation);
-
 		redirectOutput(vm.process());
 		vm.resume();
 
@@ -178,6 +164,21 @@ public final class Trace {
 		} catch (InterruptedException exc) {
 			// we don't interrupt
 		}
+		
+		methodName = eventThread.setMethodName(methodName);
+		methodName = eventThread.getMethodName();
+		//methodName = setMethodName(eventThread.setMethodName(methodName));
+		declaringType = setDeclaringType(eventThread.getDeclaringType());
+		returnType = setReturnType(eventThread.getReturnType());
+		argumentType = setArgumentType(eventThread.getArgumentType());
+		lineLocation = eventThread.getLineLocation();
+		fieldName = setFieldName(eventThread.getField());
+		valueName = setValueName(eventThread.getValue());
+		System.out.println("setterとgetter:"+declaringType + "  " + methodName + "  "
+				+ returnType + "  " + argumentType + "  " + fieldName + "  "
+				+ valueName);
+		System.out.println(methodname1 + " " + lineLocation);
+
 		writer.close();
 	}
 
@@ -271,7 +272,7 @@ public final class Trace {
 		return this.methodName = methodName;
 	}
 
-	public List<String> getDeclaringType() {
+	public List<String> getDeclaringType(List<String> declaringType) {
 		return declaringType;
 	}
 
