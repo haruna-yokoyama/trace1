@@ -553,7 +553,6 @@ public class EventThread extends Thread {
 	}
 
 	public List<String> setMethodName(List<String> methodName) {
-
 		return this.methodName = methodName;
 	}
 
