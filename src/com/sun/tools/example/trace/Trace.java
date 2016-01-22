@@ -166,8 +166,8 @@ public final class Trace {
 			// we don't interrupt
 		}
 		declaringType = setDeclaringType(eventThread.getDeclaringType());
-		returnType = setReturnType(eventThread.getReturnType());
 		methodName = setMethodName(eventThread.getMethodName());
+		returnType = setReturnType(eventThread.getReturnType());
 		argumentType = setArgumentType(eventThread.getArgumentType());
 		lineLocation = eventThread.getLineLocation();
 		fieldName = setFieldName(eventThread.getField());
@@ -274,7 +274,6 @@ public final class Trace {
 	}
 
 	public List<String> getDeclaringType() {
-		declaringType.addAll(declaringType);
 		return declaringType;
 	}
 

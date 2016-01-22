@@ -58,19 +58,13 @@ public class EventThread extends Thread {
 
 	static String nextBaseIndent = ""; // Starting indent for next thread
 
-	private List<String> methodName;
-	private String str_method;
-	private List<String> declaringType;
-	private String str_declaring;
-	private List<String> returnType;
-	private List<String> argumentType;
-	private List<Location> lineLocation;
+	private List<String> methodName = new ArrayList<>();
+	private List<String> declaringType = new ArrayList<>();
+	private List<String> returnType = new ArrayList<>();
+	private List<String> argumentType = new ArrayList<>();
+	private List<Location> lineLocation = new ArrayList<>();
 	private Value valueToBe;
 	private Field field;
-	// private StringBuffer indent;
-	// private ThreadReference thread;
-	// private String baseIndent;
-	// private String threadDelta;
 
 	private boolean connected = true; // Connected to VM
 	private boolean vmDied = true; // VMDeath occurred
@@ -217,20 +211,21 @@ public class EventThread extends Thread {
 		}
 
 		void methodEntryEvent(MethodEntryEvent event) {
+
 			// DeclaringTypeのStringをArrayListに変換
 			String str_declaring = event.method().declaringType().name();
 			String[] array1 = str_declaring.split(" ");
 			List<String> declaringType1 = new ArrayList<String>();
 			declaringType1.addAll(Arrays.asList(array1));
-			declaringType = setDeclaringType(declaringType1);
+			declaringType = setDeclaringType(str_declaring);
 			System.out.println(declaringType);
 
 			// methodNameのStringをArrayListに変換
-			str_method = event.method().name();
+			String str_method = event.method().name();
 			String[] array2 = str_method.split(" ");
-			List<String> methodName1 = new ArrayList<String>();
+			List<String> methodName1 = new ArrayList<String>();// 初期化
 			methodName1.addAll(Arrays.asList(array2));
-			methodName = setMethodName(methodName1);
+			methodName = setMethodName(str_method);
 			System.out.println(methodName);
 
 			// returnTypeのStringをArrayListに変換
@@ -238,21 +233,17 @@ public class EventThread extends Thread {
 			String[] array3 = str_return.split(" "); // 仮の配列
 			List<String> returnType1 = new ArrayList<String>(); // 仮のList<String>
 			returnType1.addAll(Arrays.asList(array3)); // 配列をListに変える
-			returnType = setMethodName(returnType1); // 変えたものをList<Sring>に代入
-			System.out.println(methodName);
+			returnType = setReturnType(str_return); // 変えたものをList<Sring>に代入
+			System.out.println(returnType);
 
 			argumentType = setArgumentType(event.method().argumentTypeNames());
-			//argumentType.addAll(argumentType);
-
 			System.out.println(argumentType);
 
 			try {
-				lineLocation = setLineLocation(event.method()
-						.allLineLocations());
+				lineLocation = setLineLocation(event.method().allLineLocations());
 				System.out.println(lineLocation);
 
 			} catch (AbsentInformationException e1) {
-				// TODO 自動生成された catch ブロック
 				e1.printStackTrace();
 			}
 
@@ -267,10 +258,13 @@ public class EventThread extends Thread {
 				e.printStackTrace();
 			}
 			indent.append("| ");
+			//trace_data(str_method);
 		}
 
 		void methodExitEvent(MethodExitEvent event) {
 			indent.setLength(indent.length() - 2);
+			System.out.println("-------exit Event------");
+
 		}
 
 		void fieldWatchEvent(ModificationWatchpointEvent event) {
@@ -536,51 +530,42 @@ public class EventThread extends Thread {
 		}
 	}
 
-	/*
-	 * public List<String> StringToList(String str){ //StringからListに変換するメソッド
-	 * List<String> list = new ArrayList<>(); StringTokenizer tokenizer = new
-	 * StringTokenizer(str, ""); while(tokenizer.hasMoreElements()){
-	 * list.add(tokenizer.nextToken()); } return list;
-	 *
-	 * }
-	 */
-
 	// getterとsetter
 
 	public List<String> getMethodName() {
-		methodName.addAll(methodName);
 		return methodName;
 	}
 
-	public List<String> setMethodName(List<String> methodName) {
-		return this.methodName = methodName;
+	public List<String> setMethodName(String str_method) {
+		methodName.add(str_method);
+		return this.methodName;
 	}
 
 	public List<String> getDeclaringType() {
-		declaringType.addAll(declaringType);
 		return declaringType;
 	}
 
-	public List<String> setDeclaringType(List<String> declaringType) {
-		return this.declaringType = declaringType;
+	public List<String> setDeclaringType(String str_declaring) {
+		declaringType.add(str_declaring);
+		return declaringType;
 	}
 
 	public List<String> getReturnType() {
-		returnType.addAll(returnType);
 		return returnType;
 	}
 
-	public void setReturnType(List<String> returnType) {
-		this.returnType = returnType;
+	public List<String> setReturnType(String str_return) {
+		returnType.add(str_return);
+		return returnType;
 	}
 
 	public List<String> getArgumentType() {
-		argumentType.addAll(argumentType);
 		return argumentType;
 	}
 
-	public List<String> setArgumentType(List<String> argumentType) {
-		return this.argumentType = argumentType;
+	public List<String> setArgumentType(List<String> str_argument) {
+		argumentType.addAll(str_argument);
+		return argumentType;
 	}
 
 	public Value getValue() {
@@ -604,7 +589,8 @@ public class EventThread extends Thread {
 		return lineLocation;
 	}
 
-	public List<Location> setLineLocation(List<Location> lineLocation) {
-		return this.lineLocation = lineLocation;
+	public List<Location> setLineLocation(List<Location> location) {
+		lineLocation.addAll(location);
+		return lineLocation;
 	}
 }
