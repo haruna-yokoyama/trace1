@@ -239,13 +239,8 @@ public class EventThread extends Thread {
 			argumentType = setArgumentType(event.method().argumentTypeNames());
 			System.out.println(argumentType);
 
-			try {
-				lineLocation = setLineLocation(event.method().allLineLocations());
-				System.out.println(lineLocation);
-
-			} catch (AbsentInformationException e1) {
-				e1.printStackTrace();
-			}
+			lineLocation = setLineLocation(event.method().location());
+			System.out.println(lineLocation);
 
 			try {
 				println(event.method().name() + "  --  "
@@ -253,6 +248,7 @@ public class EventThread extends Thread {
 						+ event.method().allLineLocations());
 				println(event.method().returnTypeName() + "   "
 						+ event.method().argumentTypeNames());
+				println(event.method().location() + "");
 			} catch (AbsentInformationException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
@@ -589,8 +585,8 @@ public class EventThread extends Thread {
 		return lineLocation;
 	}
 
-	public List<Location> setLineLocation(List<Location> location) {
-		lineLocation.addAll(location);
+	public List<Location> setLineLocation(Location location) {
+		lineLocation.add(location);
 		return lineLocation;
 	}
 }

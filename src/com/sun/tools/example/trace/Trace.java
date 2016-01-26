@@ -169,7 +169,7 @@ public final class Trace {
 		methodName = setMethodName(eventThread.getMethodName());
 		returnType = setReturnType(eventThread.getReturnType());
 		argumentType = setArgumentType(eventThread.getArgumentType());
-		lineLocation = eventThread.getLineLocation();
+		lineLocation = setLineLocation(eventThread.getLineLocation());
 		fieldName = setFieldName(eventThread.getField());
 		valueName = setValueName(eventThread.getValue());
 		System.out.println("Trace.java : ");
@@ -317,7 +317,7 @@ public final class Trace {
 		return lineLocation;
 	}
 
-	public void setLineLication(List<Location> lineLication) {
-		this.lineLocation = lineLication;
+	public List<Location> setLineLocation(List<Location> lineLication) {
+		return this.lineLocation = lineLication;
 	}
 }
